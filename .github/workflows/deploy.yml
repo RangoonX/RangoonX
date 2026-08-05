@@ -4,16 +4,20 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/python-versions@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -25,10 +29,10 @@ jobs:
 
       - name: Build Flet Web App
         run: |
-          flet build web --base-url /${{ github.event.repository.name }}/
+          flet build web --base-url /RangoonX/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/webflet build web --base-url /RangoonX/
+          publish_dir: ./build/web
