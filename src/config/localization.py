@@ -126,51 +126,49 @@ EMBEDDED_TRANSLATIONS = {
 }
 
 
+import json
+import urllib.request
+from config import logger
+
+# ... (DEFAULT_EN, DEFAULT_MM, EMBEDDED_TRANSLATIONS defined above)
+
 class LocalizationManager:
     _translations = {}
-
-    @classmethod
-    def _get_lang_folder_path(cls):
-        """
-        Helper to resolve absolute path to translation json files.
-        """
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        src_dir = os.path.dirname(current_dir)
-
-        candidates = [
-            os.path.join(src_dir, "assets", "langs"),
-            os.path.join(src_dir, "assets", "lang"),
-            os.path.join("assets", "langs"),
-            os.path.join("assets", "lang"),
-            os.path.join("src", "assets", "langs"),
-            os.path.join("src", "assets", "lang"),
-            os.path.join("langs"),
-            os.path.join("lang"),
-        ]
-
-        for candidate in candidates:
-            if os.path.exists(candidate):
-                return candidate
-
-        return None
 
     @classmethod
     def load_translations(cls, lang_code: str):
         if lang_code in cls._translations and cls._translations[lang_code]:
             return cls._translations[lang_code]
 
-        lang_folder = cls._get_lang_folder_path()
-        if lang_folder:
-            file_path = os.path.join(lang_folder, f"{lang_code}.json")
-            if os.path.exists(file_path):
-                try:
-                    with open(file_path, "r", encoding="utf-8") as f:
-                        cls._translations[lang_code] = json.load(f)
-                        return cls._translations[lang_code]
-                except Exception as e:
-                    logger.error(f"Error parsing JSON translation for {lang_code}: {e}")
+        candidate_paths = [
+            f"lang/{lang_code}.json",
+            f"langs/{lang_code}.json",
+            f"assets/lang/{lang_code}.json",
+            f"assets/langs/{lang_code}.json",
+            f"src/assets/lang/{lang_code}.json",
+            f"src/assets/langs/{lang_code}.json",
+        ]
 
-        # Fallback to embedded translation dictionary (100% Pyodide & Web WASM compatible)
+        for path in candidate_paths:
+            # Try direct file open without os.path
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    cls._translations[lang_code] = json.load(f)
+                    logger.info(f"Loaded JSON translation from: {path}")
+                    return cls._translations[lang_code]
+            except Exception:
+                pass
+
+            # Try HTTP urlopen for Pyodide web runtime
+            try:
+                response = urllib.request.urlopen(path)
+                data = json.loads(response.read().decode("utf-8"))
+                cls._translations[lang_code] = data
+                logger.info(f"Loaded JSON translation via HTTP from: {path}")
+                return cls._translations[lang_code]
+            except Exception:
+                pass
+
         fallback_data = EMBEDDED_TRANSLATIONS.get(lang_code, EMBEDDED_TRANSLATIONS.get("en", {}))
         cls._translations[lang_code] = fallback_data
         return fallback_data
