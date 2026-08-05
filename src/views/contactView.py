@@ -9,28 +9,34 @@ from config.colors import AppPalette
 
 def get_company_info():
     """
-    Load company contact info from JSON config file.
+    Load company contact info from JSON config file without os.path dependency.
     """
-    try:
-        json_path = os.path.join("src", "assets", "config", "company_info.json")
-        if not os.path.exists(json_path):
-            json_path = os.path.join("assets", "config", "company_info.json")
-        with open(json_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception:
-        return {
-            "phone": "+959 785955940",
-            "phone_url": "tel:+959785955940",
-            "email": "rangoonx.com@gmail.com",
-            "email_url": "mailto:rangoonx.com@gmail.com",
-            "viber": "+959 785955940",
-            "viber_url": "viber://chat?number=%2B959785955940",
-            "tiktok": "@rangoonx_official",
-            "tiktok_url": "https://www.tiktok.com/@rangoonx_official",
-            "business_card_url": "https://rangoonx.com/card",
-            "address": "Level 8, Tower B, HAGL Myanmar Centre, Yangon, Myanmar",
-            "maps_url": "https://maps.google.com/?q=HAGL+Myanmar+Centre"
-        }
+    candidate_paths = [
+        "config/company_info.json",
+        "assets/config/company_info.json",
+        "src/assets/config/company_info.json",
+    ]
+    for path in candidate_paths:
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+
+    return {
+        "company_name": "RangoonX Software House",
+        "phone": "+959 785955940",
+        "phone_url": "tel:+959785955940",
+        "email": "rangoonx.com@gmail.com",
+        "email_url": "mailto:rangoonx.com@gmail.com",
+        "viber": "+959 785955940",
+        "viber_url": "viber://chat?number=%2B959785955940",
+        "tiktok": "@rangoonx_official",
+        "tiktok_url": "https://www.tiktok.com/@rangoonx_official",
+        "business_card_url": "https://rangoonx.com/card",
+        "address": "Level 8, Tower B, HAGL Myanmar Centre, Yangon, Myanmar",
+        "maps_url": "https://maps.google.com/?q=HAGL+Myanmar+Centre"
+    }
 
 
 @ft.component
