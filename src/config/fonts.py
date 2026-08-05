@@ -14,6 +14,6 @@ class AppFonts:
     
     # Local Font Mapping for instant asset loading (No remote network delay)
     FONTS_MAPPING = {
-        "Padauk-Regular": "/fonts/Padauk-Regular.ttf",
-        "Padauk-Bold": "/fonts/Padauk-Bold.ttf",
+        "Padauk-Regular": "fonts/Padauk-Regular.ttf",
+        "Padauk-Bold": "fonts/Padauk-Bold.ttf",
     }

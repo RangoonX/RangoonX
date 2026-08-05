@@ -10,13 +10,24 @@ class LocalizationManager:
     @classmethod
     def _get_lang_folder_path(cls):
         """
-        Helper to resolve absolute path to src/assets/langs or src/assets/lang
+        Helper to resolve absolute path to translation json files across desktop and Pyodide web runtime.
         """
-        current_dir = os.path.dirname(os.path.abspath(__file__)) # src/config
-        src_dir = os.path.dirname(current_dir) # src
-        langs_dir = os.path.join(src_dir, "assets", "langs")
-        if os.path.exists(langs_dir):
-            return langs_dir
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        src_dir = os.path.dirname(current_dir)
+        
+        candidates = [
+            os.path.join(src_dir, "assets", "langs"),
+            os.path.join(src_dir, "assets", "lang"),
+            os.path.join("assets", "langs"),
+            os.path.join("assets", "lang"),
+            os.path.join("src", "assets", "langs"),
+            os.path.join("src", "assets", "lang"),
+        ]
+        
+        for candidate in candidates:
+            if os.path.exists(candidate):
+                return candidate
+
         return os.path.join(src_dir, "assets", "lang")
 
     @classmethod
