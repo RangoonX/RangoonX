@@ -1,0 +1,43 @@
+[project]
+name = "rangoonx"
+version = "0.1.0"
+description = "This is static site"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "Lynn Myat Aung", email = "rangoonx.com@gmail.com" }
+]
+dependencies = [
+    "flet>=0.86.5",
+    "python-dotenv>=1.2.2",
+]
+
+[dependency-groups]
+dev = [
+    "flet-cli>=0.86.5",
+    "flet-desktop>=0.86.5",
+    "flet-web>=0.86.5",
+    # Integration testing with `flet test` / pytest. The `test` extra brings in
+    # pytest, pytest-asyncio and the screenshot-comparison dependencies.
+    "flet[test]>=0.86.5",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.flet]
+org = "com.RangoonX"
+product = "RangoonX"
+company = "RangoonX"
+copyright = "Copyright (C) 2023-2026 by Flet"
+
+[tool.flet.app]
+path = "src"
+
+[tool.flet.splash]
+color = "" # --splash-color
+dark_color = "" # --splash-dark-color
+web = false # --no-web-splash
+ios = false # --no-ios-splash
+android = false # --no-android-splash
