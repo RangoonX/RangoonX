@@ -89,16 +89,7 @@ def AppButton(
         elif text:
             content = text
 
-    button_classes = {
-        "button": ft.Button,
-        "filled": ft.FilledButton,
-        "elevated": ft.ElevatedButton,
-        "outlined": ft.OutlinedButton,
-        "text": ft.TextButton,
-        "filled_tonal": ft.FilledTonalButton,
-    }
-    
-    button_cls = button_classes.get(str(variant).lower(), ft.Button)
+    button_cls = ft.Button
     
     if content is not None:
         kwargs["content"] = content

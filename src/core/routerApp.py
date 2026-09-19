@@ -53,7 +53,7 @@ def routingApp():
         lambda: LocalizationContextModel(
             lang=language,
             get=lambda k: LocalizationManager.get_string(language, k),
-            font_scale=0.85 if language == "mm" else 1.0,
+            font_scale=0.78 if language == "mm" else 1.0,
             set_lang=set_language,
         ),
         [language],

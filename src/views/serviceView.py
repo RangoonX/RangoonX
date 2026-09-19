@@ -1,22 +1,8 @@
-# src/views/serviceView.py
-
 import flet as ft
 from components.typography import AppText, AppButton
+from components.animations import PopInContainer
+from components.footer import AppFooter
 from config.colors import AppPalette
-
-
-@ft.component
-def PopInContainer(content, is_active: bool = True, duration: int = 500, initial_scale: float = 0.88):
-    """
-    Reusable Scroll Reveal Pop-in Animation component.
-    """
-    return ft.Container(
-        content=content,
-        opacity=1.0 if is_active else 0.0,
-        scale=1.0 if is_active else initial_scale,
-        animate_opacity=ft.Animation(duration, ft.AnimationCurve.EASE_OUT),
-        animate_scale=ft.Animation(duration, ft.AnimationCurve.EASE_OUT_BACK),
-    )
 
 
 @ft.component
@@ -31,63 +17,55 @@ def ServiceCard(
     text_align_mode=ft.TextAlign.LEFT,
     is_revealed: bool = True,
 ):
-    """
-    Service Card with top primary accent border, hover scale & scroll reveal.
-    """
-    is_hovered, set_is_hovered = ft.use_state(False)
-
     badge_controls = []
     if tags:
         badge_controls = [
             ft.Container(
-                content=ft.Text(tag, size=12, weight=ft.FontWeight.W_600, color=AppPalette.PRIMARY),
-                bgcolor=AppPalette.SURFACE_CONTAINER,
+                content=ft.Text(
+                    tag,
+                    size=11,
+                    weight=ft.FontWeight.W_600,
+                    color=AppPalette.PRIMARY,
+                ),
+                bgcolor=AppPalette.PRIMARY_FIXED,
                 padding=ft.Padding.symmetric(horizontal=10, vertical=4),
-                border_radius=ft.BorderRadius.all(6),
+                border_radius=ft.BorderRadius.all(20),
             ) for tag in tags
         ]
 
-    def handle_hover(e):
-        set_is_hovered(e.data == "true")
-
     return ft.Container(
         bgcolor=AppPalette.SURFACE_CONTAINER_LOWEST,
-        border=ft.Border.only(
-            top=ft.BorderSide(3, AppPalette.PRIMARY if is_hovered else AppPalette.PRIMARY_CONTAINER),
-            left=ft.BorderSide(1, AppPalette.OUTLINE_VARIANT),
-            right=ft.BorderSide(1, AppPalette.OUTLINE_VARIANT),
-            bottom=ft.BorderSide(1, AppPalette.OUTLINE_VARIANT),
-        ),
+        border=ft.Border.all(1, AppPalette.OUTLINE_VARIANT),
         border_radius=ft.BorderRadius.all(12),
         padding=ft.Padding.all(24),
         opacity=1.0 if is_revealed else 0.0,
-        scale=1.02 if is_hovered else (1.0 if is_revealed else 0.90),
+        scale=1.0 if is_revealed else 0.90,
         animate_opacity=ft.Animation(450, ft.AnimationCurve.EASE_OUT),
-        animate_scale=ft.Animation(350, ft.AnimationCurve.EASE_OUT_BACK),
-        on_hover=handle_hover,
+        animate_scale=ft.Animation(300, ft.AnimationCurve.EASE_OUT),
+        shadow=ft.BoxShadow(
+            spread_radius=0,
+            blur_radius=4,
+            color=ft.Colors.with_opacity(0.04, ft.Colors.BLACK),
+            offset=ft.Offset(0, 2),
+        ),
         content=ft.Column(
             horizontal_alignment=cross_align_mode,
             controls=[
-                ft.Row(
-                    controls=[
-                        ft.Container(
-                            content=ft.Icon(icon, size=28, color=AppPalette.PRIMARY),
-                            bgcolor=AppPalette.SURFACE_CONTAINER_LOW,
-                            padding=ft.Padding.all(10),
-                            border_radius=ft.BorderRadius.all(8),
-                        ),
-                        ft.Container(width=12),
-                        ft.Column(
-                            controls=[
-                                AppText(value_key=title_key, variant="h3", bold=True, color=AppPalette.ON_SURFACE),
-                            ],
-                            spacing=2,
-                            expand=True,
-                        ),
-                    ],
-                    alignment=main_align_mode,
+                ft.Container(
+                    content=ft.Icon(icon, size=24, color=AppPalette.ON_PRIMARY),
+                    bgcolor=AppPalette.PRIMARY,
+                    padding=ft.Padding.all(10),
+                    border_radius=ft.BorderRadius.all(10),
                 ),
-                ft.Container(height=12),
+                ft.Container(height=16),
+                AppText(
+                    value_key=title_key,
+                    variant="h3",
+                    bold=True,
+                    color=AppPalette.ON_SURFACE,
+                    text_align=text_align_mode,
+                ),
+                ft.Container(height=8),
                 AppText(
                     value_key=desc_key,
                     variant="body",
@@ -95,9 +73,14 @@ def ServiceCard(
                     text_align=text_align_mode,
                 ),
                 ft.Container(height=16) if badge_controls else ft.Container(),
-                ft.Row(controls=badge_controls, spacing=8, alignment=main_align_mode, wrap=True) if badge_controls else ft.Container(),
+                ft.Row(
+                    controls=badge_controls,
+                    spacing=6,
+                    alignment=main_align_mode,
+                    wrap=True,
+                ) if badge_controls else ft.Container(),
             ],
-            spacing=4,
+            spacing=0,
         ),
         col={"sm": 12, "md": col_span, "lg": col_span},
     )
@@ -115,7 +98,6 @@ def serviceView():
     cross_align_mode = ft.CrossAxisAlignment.CENTER if is_mobile else ft.CrossAxisAlignment.START
     main_align_mode = ft.MainAxisAlignment.CENTER if is_mobile else ft.MainAxisAlignment.START
 
-    # ── Auto Pop-up Animation State Management ──────────────────────────────────
     hero_revealed, set_hero_revealed = ft.use_state(False)
     cards_revealed, set_cards_revealed = ft.use_state(False)
     banner_revealed, set_banner_revealed = ft.use_state(False)
@@ -127,24 +109,28 @@ def serviceView():
 
     ft.on_updated(trigger_auto_animations, [])
 
-    # ── 1. Page Header Section ──────────────────────────────────────────────────
+    # ── Page Header ───────────────────────────────────────────────────────────
     header_section = ft.Container(
         padding=ft.Padding.symmetric(
             horizontal=20 if is_mobile else (36 if is_tablet else 64),
-            vertical=28 if is_mobile else 44,
+            vertical=36 if is_mobile else 52,
         ),
         content=PopInContainer(
             content=ft.Column(
                 horizontal_alignment=cross_align_mode,
                 controls=[
-                    AppText(
-                        value_key="hero_tag",
-                        variant="caption",
-                        bold=True,
-                        color=AppPalette.PRIMARY,
-                        text_align=text_align_mode,
+                    ft.Container(
+                        content=AppText(
+                            value_key="hero_tag",
+                            variant="caption",
+                            bold=True,
+                            color=AppPalette.PRIMARY,
+                        ),
+                        bgcolor=AppPalette.PRIMARY_FIXED,
+                        padding=ft.Padding.symmetric(horizontal=14, vertical=6),
+                        border_radius=ft.BorderRadius.all(20),
                     ),
-                    ft.Container(height=4),
+                    ft.Container(height=12),
                     AppText(
                         value_key="services_page_title",
                         variant="h1",
@@ -160,21 +146,21 @@ def serviceView():
                         text_align=text_align_mode,
                     ),
                 ],
-                spacing=4,
+                spacing=0,
             ),
             is_active=hero_revealed,
             duration=500,
         ),
     )
 
-    # ── 2. Services Grid Section ────────────────────────────────────────────────
+    # ── Services Grid ─────────────────────────────────────────────────────────
     services_grid = ft.ResponsiveRow(
         controls=[
             ServiceCard(
                 icon=ft.Icons.CODE_ROUNDED,
                 title_key="service_1_title",
                 desc_key="service_1_desc",
-                tags=["React", "Node.js", "Flutter", "Python"],
+                tags=["React", "Flutter", "Python", "Node.js"],
                 col_span=6,
                 cross_align_mode=cross_align_mode,
                 main_align_mode=main_align_mode,
@@ -185,7 +171,7 @@ def serviceView():
                 icon=ft.Icons.CLOUD_SYNC_OUTLINED,
                 title_key="service_2_title",
                 desc_key="service_2_desc",
-                tags=["AWS", "Azure", "DevOps", "Docker"],
+                tags=["AWS", "Azure", "Docker", "CI/CD"],
                 col_span=6,
                 cross_align_mode=cross_align_mode,
                 main_align_mode=main_align_mode,
@@ -196,7 +182,7 @@ def serviceView():
                 icon=ft.Icons.PSYCHOLOGY_OUTLINED,
                 title_key="service_3_title",
                 desc_key="service_3_desc",
-                tags=["Machine Learning", "Python", "Data Engineering"],
+                tags=["Machine Learning", "LLM", "Computer Vision"],
                 col_span=6,
                 cross_align_mode=cross_align_mode,
                 main_align_mode=main_align_mode,
@@ -204,9 +190,31 @@ def serviceView():
                 is_revealed=cards_revealed,
             ),
             ServiceCard(
-                icon=ft.Icons.SUPPORT_AGENT_OUTLINED,
+                icon=ft.Icons.DEVELOPER_BOARD_OUTLINED,
                 title_key="service_4_title",
                 desc_key="service_4_desc",
+                tags=["Embedded", "Sensors", "PCB", "Firmware"],
+                col_span=6,
+                cross_align_mode=cross_align_mode,
+                main_align_mode=main_align_mode,
+                text_align_mode=text_align_mode,
+                is_revealed=cards_revealed,
+            ),
+            ServiceCard(
+                icon=ft.Icons.POINT_OF_SALE_OUTLINED,
+                title_key="service_5_title",
+                desc_key="service_5_desc",
+                tags=["Inventory", "Finance", "Multi-branch"],
+                col_span=6,
+                cross_align_mode=cross_align_mode,
+                main_align_mode=main_align_mode,
+                text_align_mode=text_align_mode,
+                is_revealed=cards_revealed,
+            ),
+            ServiceCard(
+                icon=ft.Icons.SECURITY_OUTLINED,
+                title_key="service_6_title",
+                desc_key="service_6_desc",
                 tags=["SLA", "Security Audit", "24/7 Monitoring"],
                 col_span=6,
                 cross_align_mode=cross_align_mode,
@@ -223,11 +231,12 @@ def serviceView():
         bgcolor=AppPalette.SURFACE_CONTAINER_LOW,
         padding=ft.Padding.symmetric(
             horizontal=20 if is_mobile else (36 if is_tablet else 64),
-            vertical=32 if is_mobile else 48,
+            vertical=40 if is_mobile else 56,
         ),
         content=services_grid,
     )
 
+    # ── CTA Banner ────────────────────────────────────────────────────────────
     banner_height = 280 if is_mobile else (360 if is_tablet else 400)
 
     banner_image_container = ft.Container(
@@ -268,14 +277,14 @@ def serviceView():
                                     color=AppPalette.ON_SURFACE,
                                     text_align=text_align_mode,
                                 ),
-                                ft.Container(height=6),
+                                ft.Container(height=8),
                                 AppText(
                                     value_key="services_cta_desc",
                                     variant="body",
                                     color=AppPalette.ON_SURFACE_VARIANT,
                                     text_align=text_align_mode,
                                 ),
-                                ft.Container(height=20),
+                                ft.Container(height=24),
                                 AppButton(
                                     value_key="get_in_touch",
                                     variant="filled",
@@ -284,25 +293,33 @@ def serviceView():
                                         bgcolor=AppPalette.PRIMARY,
                                         color=AppPalette.ON_PRIMARY,
                                         padding=ft.Padding.symmetric(horizontal=28, vertical=16),
-                                        shape=ft.RoundedRectangleBorder(radius=8),
+                                        shape=ft.RoundedRectangleBorder(radius=10),
+                                        shadow_color=ft.Colors.with_opacity(0.2, AppPalette.PRIMARY),
+                                        elevation=4,
                                     ),
                                 ),
                             ],
-                            spacing=4,
+                            spacing=0,
                         ),
                     ),
                 ),
-            ]
+            ],
         ),
         border_radius=ft.BorderRadius.all(16),
         border=ft.Border.all(1, AppPalette.OUTLINE_VARIANT),
         clip_behavior=ft.ClipBehavior.ANTI_ALIAS,
+        shadow=ft.BoxShadow(
+            spread_radius=0,
+            blur_radius=12,
+            color=ft.Colors.with_opacity(0.06, ft.Colors.BLACK),
+            offset=ft.Offset(0, 4),
+        ),
     )
 
     banner_section = ft.Container(
         padding=ft.Padding.symmetric(
             horizontal=20 if is_mobile else (36 if is_tablet else 64),
-            vertical=36 if is_mobile else 52,
+            vertical=40 if is_mobile else 56,
         ),
         content=PopInContainer(
             content=banner_image_container,
@@ -311,42 +328,6 @@ def serviceView():
         ),
     )
 
-    # ── 4. Footer Section ──────────────────────────────────────────────────────
-    footer_section = ft.Container(
-        bgcolor=AppPalette.SURFACE,
-        border=ft.Border.only(top=ft.BorderSide(1, AppPalette.OUTLINE_VARIANT)),
-        padding=ft.Padding.symmetric(
-            horizontal=20 if is_mobile else (36 if is_tablet else 64),
-            vertical=28,
-        ),
-        content=ft.Column(
-            horizontal_alignment=cross_align_mode,
-            controls=[
-                ft.Row(
-                    controls=[
-                        AppText(value_key="brand_name", variant="h3", bold=True, color=AppPalette.PRIMARY),
-                        ft.Text("•", color=AppPalette.OUTLINE),
-                        AppText(value_key="footer_slogan", variant="caption", color=AppPalette.ON_SURFACE_VARIANT),
-                    ],
-                    alignment=main_align_mode,
-                    wrap=True,
-                    spacing=12,
-                ),
-                ft.Container(height=12),
-                ft.Divider(color=AppPalette.OUTLINE_VARIANT, height=1),
-                ft.Container(height=8),
-                AppText(
-                    value_key="copyright",
-                    variant="caption",
-                    color=AppPalette.ON_SURFACE_VARIANT,
-                    text_align=text_align_mode,
-                ),
-            ],
-            spacing=4,
-        ),
-    )
-
-    # ── Scrollable ListView ───────────────────────────────────────────────────
     return ft.ListView(
         expand=True,
         spacing=0,
@@ -354,6 +335,6 @@ def serviceView():
             header_section,
             services_section,
             banner_section,
-            footer_section,
-        ]
+            AppFooter(),
+        ],
     )

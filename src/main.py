@@ -12,8 +12,8 @@ async def main(page: ft.Page):
     page.fonts = fonts.AppFonts.FONTS_MAPPING
     page.theme = colors.get_app_theme(ft.ThemeMode.LIGHT)
     page.dark_theme = colors.get_app_theme(ft.ThemeMode.DARK)
-    page.render(routingApp)
     page.padding = 0
+    page.render(routingApp)
     
     
 

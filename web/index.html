@@ -48,7 +48,7 @@
       height: 100%;
       margin: 0;
       padding: 0;
-      background-color: #0B0F19;
+      background-color: #FFFFFF;
       font-family: system-ui, -apple-system, sans-serif;
     }
   </style>
@@ -67,14 +67,34 @@
 </head>
 
 <body>
-  <div id="splash" style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:#0B0F19; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:99999; transition: opacity 0.5s ease;">
-    <img src="assets/images/rangoonX_logo.png" alt="RangoonX" style="width: 140px; height: auto; margin-bottom: 24px; animation: pulse 2s infinite ease-in-out;">
-    <div style="width: 160px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; position: relative;">
-      <div style="position: absolute; height: 100%; background: linear-gradient(90deg, #3B82F6, #60A5FA); border-radius: 4px; animation: loadingBar 1.5s infinite ease-in-out;"></div>
+  <div id="splash" style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:#FFFFFF; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:99999; transition: opacity 0.5s ease;">
+    <img src="assets/loading.png" alt="RangoonX" class="splash-logo">
+    <div class="splash-bar">
+      <div class="splash-bar-fill"></div>
     </div>
-    <p style="color: #94A3B8; font-size: 13px; margin-top: 16px; letter-spacing: 0.5px;">Loading RangoonX...</p>
   </div>
   <style>
+    .splash-logo {
+      width: min(40vw, 180px);
+      height: auto;
+      margin-bottom: 28px;
+      animation: pulse 2s infinite ease-in-out;
+    }
+    .splash-bar {
+      width: min(50vw, 160px);
+      height: 3px;
+      background: #E5E7EB;
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+    .splash-bar-fill {
+      position: absolute;
+      height: 100%;
+      background: #3B82F6;
+      border-radius: 3px;
+      animation: loadingBar 1.5s infinite ease-in-out;
+    }
     @keyframes pulse {
       0% { transform: scale(0.96); opacity: 0.85; }
       50% { transform: scale(1.04); opacity: 1; }
