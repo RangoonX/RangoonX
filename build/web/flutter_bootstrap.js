@@ -33,25 +33,33 @@ addEventListener("message", eventListener);
 if (!window._flutter) {
   window._flutter = {};
 }
-_flutter.buildConfig = {"engineRevision":"0cd610717bde95fd88343c64f81c11ba4e5c0010","builds":[{"compileTarget":"dart2wasm","renderer":"skwasm","mainWasmPath":"main.dart.wasm","jsSupportRuntimePath":"main.dart.mjs"},{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"}]};
+_flutter.buildConfig = {"engineRevision":"a10d8ac38de835021c8d2f920dbf50a920ccc030","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"},{}]};
 
 
+// Multi-view is a Flet feature, but `flet build web` has no way to turn it
+// on, so the flag and the config key it fed are both gone rather than left
+// reading an undefined value. Flutter defaults multiViewEnabled to false.
 var flutterConfig = {
-    multiViewEnabled: flet.multiView,
     assetBase: flet.assetBase
 };
 if (flet.webRenderer != "auto") {
     flutterConfig.renderer = flet.webRenderer;
 }
-if (flet.noCdn) {
+// Keyed off the values themselves, not off `flet.noCdn`: a host serving its
+// own copy of the runtime can point these anywhere without pretending the app
+// was built with `--no-cdn`. Left unset, Flutter falls back to gstatic for
+// CanvasKit and to Google Fonts for the Noto fallbacks.
+if (flet.canvasKitBaseUrl) {
     flutterConfig.canvasKitBaseUrl = flet.canvasKitBaseUrl;
+}
+if (flet.fontFallbackBaseUrl) {
     flutterConfig.fontFallbackBaseUrl = flet.fontFallbackBaseUrl;
 }
 
 _flutter.loader.load({
     config: flutterConfig,
     serviceWorkerSettings: {
-        serviceWorkerVersion: "2300246850" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */,
+        serviceWorkerVersion: "2309208026" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */,
     },
     onEntrypointLoaded: async function (engineInitializer) {
         const engine = await engineInitializer.initializeEngine(flutterConfig);

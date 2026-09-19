@@ -3,9 +3,9 @@
     "short_name": "rangoonx",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#FFFFFF",
-    "theme_color": "#0175C2",
-    "description": "",
+    "background_color": "#ffffff",
+    "theme_color": "#FF005F",
+    "description": "This is static site",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
