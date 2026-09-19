@@ -8,8 +8,13 @@ authors = [
     { name = "Lynn Myat Aung", email = "rangoonx.com@gmail.com" }
 ]
 dependencies = [
-    "flet[all]>=1.0.0",
+    "flet>=1.0.0",
     "python-dotenv>=1.2.2",
+]
+
+[dependency-groups]
+dev = [
+    "flet[all]>=1.0.0",
 ]
 
 [tool.pytest.ini_options]
