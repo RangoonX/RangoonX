@@ -27,6 +27,16 @@ class LocalizationContextModel:
 
 
 
+@ft.observable
+@dataclass(frozen=True)
+class ScreenContextModel:
+    width: float
+    is_mobile: bool
+    is_tablet: bool
+    is_desktop: bool
+
+
 # Global Contexts to avoid circular imports
 ThemeContext = ft.create_context(ThemeContextModel(ft.ThemeMode.SYSTEM, lambda: None))
 LocalizationContext = ft.create_context(LocalizationContextModel("en", lambda k: k, 1.0, lambda l: None))
+ScreenContext = ft.create_context(ScreenContextModel(width=1200, is_mobile=False, is_tablet=False, is_desktop=True))

@@ -75,8 +75,8 @@ DEFAULT_MM = {
     "nav_services": "ဝန်ဆောင်မှုများ",
     "nav_projects": "စီမံကိန်းများ",
     "nav_contact": "ဆက်သွယ်ရန်",
-    "hero_tag": "တိကျသေချာသော နည်းပညာ အင်ဂျင်နီယာ",
-    "hero_title": "စီးပွားရေးလုပ်ငန်းများအတွက် ပြည့်စုံသော နည်းပညာ ဖြေရှင်းချက်များ",
+    "hero_tag": "သင့်လုပ်ငန်းအတွက် System",
+    "hero_title": "စီးပွားရေးလုပ်ငန်းများအတွက် အကောင်းဆုံးရွေးချယ်မှု",
     "hero_subtitle": "IoT စနစ်များ၊ AI အလိုအလျောက်စနစ်များ၊ ERP နှင့် POS စနစ်များမှသည် Cloud နှင့် ဆော့ဖ်ဝဲလ် ရေးဆွဲခြင်းအထိ — သင့်လုပ်ငန်းနှင့်အတူ ကြီးထွားနိုင်သော ဒီဂျစ်တယ် စနစ်များကို တည်ဆောက်ပေးပါသည်။",
     "explore_services": "ဝန်ဆောင်မှုများ ကြည့်ရှုရန်",
     "contact_sales": "ဆက်သွယ်မေးမြန်းရန်",
@@ -152,17 +152,19 @@ class LocalizationManager:
         if lang_code in cls._translations and cls._translations[lang_code]:
             return cls._translations[lang_code]
 
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         candidate_paths = [
-            f"lang/{lang_code}.json",
-            f"langs/{lang_code}.json",
+            os.path.join(base_dir, "assets", "lang", f"{lang_code}.json"),
+            os.path.join(base_dir, "assets", "langs", f"{lang_code}.json"),
             f"assets/lang/{lang_code}.json",
             f"assets/langs/{lang_code}.json",
-            f"src/assets/lang/{lang_code}.json",
-            f"src/assets/langs/{lang_code}.json",
+            f"lang/{lang_code}.json",
+            f"langs/{lang_code}.json",
         ]
 
         for path in candidate_paths:
-            # Try direct file open without os.path
+            if not os.path.isfile(path):
+                continue
             try:
                 with open(path, "r", encoding="utf-8") as f:
                     cls._translations[lang_code] = json.load(f)
@@ -171,7 +173,7 @@ class LocalizationManager:
             except Exception:
                 pass
 
-            # Try HTTP urlopen for Pyodide web runtime
+        for path in candidate_paths:
             try:
                 response = urllib.request.urlopen(path)
                 data = json.loads(response.read().decode("utf-8"))

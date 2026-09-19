@@ -3,35 +3,19 @@
 import flet as ft
 from config import logger
 from components.typography import AppText
-from core.helper import use_localization_context
+from core.helper import use_localization_context, use_screen_context
 from config.colors import AppPalette
 
 
 @ft.component
 def rootLayout():
     loc = use_localization_context()
+    screen = use_screen_context()
     outlet = ft.use_route_outlet()
     page = ft.context.page
 
-    # Screen width state in pixels for responsive breakpoints
-    width, set_width = ft.use_state(page.width or 1200)
-
-    # State for mobile navigation menu toggle
-    is_mobile_menu_open, set_is_mobile_menu_open = ft.use_state(False)
-
-    def on_resize(e):
-        set_width(page.width)
-        if page.width >= 768:
-            set_is_mobile_menu_open(False)
-
-    page.on_resized = on_resize
-
-    def toggle_mobile_menu(e):
-        set_is_mobile_menu_open(not is_mobile_menu_open)
-
-    # Device Pixel Breakpoints
-    is_mobile = width < 768
-    is_tablet = 768 <= width < 1024
+    is_mobile = screen.is_mobile
+    is_tablet = screen.is_tablet
 
     # Current Active Route
     current_route = page.route if page and page.route else "/"
@@ -57,7 +41,7 @@ def rootLayout():
                     AppPalette.PRIMARY if is_active else ft.Colors.TRANSPARENT,
                 ),
             ),
-            on_click=lambda e: (page.go(target_route), set_is_mobile_menu_open(False)),
+            on_click=lambda e: page.navigate(target_route),
             ink=True,
             bgcolor=ft.Colors.TRANSPARENT,
         )
@@ -109,7 +93,7 @@ def rootLayout():
         try:
             index = int(e.data)
             if 0 <= index < len(nav_routes):
-                page.go(nav_routes[index])
+                page.navigate(nav_routes[index])
         except Exception as err:
             logger.error(f"Error navigating via bottom bar: {err}")
 
@@ -118,6 +102,8 @@ def rootLayout():
         selected_index=current_index,
         bgcolor=AppPalette.SURFACE_CONTAINER_LOWEST,
         indicator_color=AppPalette.PRIMARY_FIXED,
+        elevation=2,
+        border=ft.Border.only(top=ft.BorderSide(1, AppPalette.OUTLINE_VARIANT)),
         destinations=[
             ft.NavigationBarDestination(
                 icon=ft.Icons.HOME_OUTLINED,
@@ -129,11 +115,6 @@ def rootLayout():
                 selected_icon=ft.Icons.WORK,
                 label=loc.get("nav_services"),
             ),
-            # ft.NavigationBarDestination(
-            #     icon=ft.Icons.BUSINESS_CENTER_OUTLINED,
-            #     selected_icon=ft.Icons.BUSINESS_CENTER,
-            #     label=loc.get("nav_projects"),
-            # ),
             ft.NavigationBarDestination(
                 icon=ft.Icons.CONTACT_MAIL_OUTLINED,
                 selected_icon=ft.Icons.CONTACT_MAIL,
@@ -141,10 +122,9 @@ def rootLayout():
             ),
         ],
         on_change=handle_nav_change,
-        visible=is_mobile,
     )
 
-    appbar_border = ft.Border.only(bottom=ft.BorderSide(1, AppPalette.OUTLINE_VARIANT))
+    show_bottom_nav = is_mobile
 
     if is_mobile:
         appBar = ft.AppBar(
@@ -174,7 +154,7 @@ def rootLayout():
                 padding=ft.Padding.only(left=12),
                 alignment=ft.Alignment.CENTER_LEFT,
             ),
-            leading_width=220,
+            leading_width=200,
             title=center_nav_links,
             center_title=True,
             actions=[right_actions],
@@ -295,7 +275,7 @@ def rootLayout():
                     expand=True,
                     alignment=ft.Alignment.TOP_CENTER,
                 ),
-                mobile_bottom_bar if is_mobile else ft.Container(),
+                mobile_bottom_bar if show_bottom_nav else ft.Container(),
             ],
         ),
     )

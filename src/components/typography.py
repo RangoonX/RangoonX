@@ -1,7 +1,7 @@
 #/src/components/typography.py
 
 import flet as ft
-from models.app_route_model import LocalizationContext
+from models.app_route_model import LocalizationContext, ScreenContext
 
 from config.fonts import AppFonts
 
@@ -34,14 +34,13 @@ def AppText(
     
     base_size = sizes.get(variant, 16)
     
-    # Calculate responsive scale based on viewport width
-    page_width = ft.context.page.width if ft.context.page and ft.context.page.width else 1024
-    
-    if page_width < 600:         # Mobile View
+    screen = ft.use_context(ScreenContext)
+
+    if screen.is_mobile:
         responsive_scale = 0.85
-    elif page_width < 1024:      # Tablet View
+    elif screen.is_tablet:
         responsive_scale = 1.0
-    else:                        # Desktop View
+    else:
         responsive_scale = 1.15
         
     # Calculate final size based on localization font_scale and responsive_scale

@@ -4,7 +4,8 @@ import flet as ft
 from config import logger
 from models.app_route_model import (
     ThemeContext, ThemeContextModel,
-    LocalizationContext, LocalizationContextModel
+    LocalizationContext, LocalizationContextModel,
+    ScreenContext, ScreenContextModel,
 )
 from core.auth_provider import build_auth_state
 from config.localization import LocalizationManager
@@ -58,8 +59,31 @@ def routingApp():
         ),
         [language],
     )
+
+    # ── Screen Size State ──────────────────────────────────────────────────
+    page = ft.context.page
+    screen_width, set_screen_width = ft.use_state(
+        page.width if page and page.width else 1200
+    )
+
+    def handle_resize(e):
+        new_w = page.width
+        if new_w:
+            set_screen_width(new_w)
+
+    page.on_resize = handle_resize
+
+    screen_value = ft.use_memo(
+        lambda: ScreenContextModel(
+            width=screen_width,
+            is_mobile=screen_width < 768,
+            is_tablet=768 <= screen_width < 1024,
+            is_desktop=screen_width >= 1024,
+        ),
+        [screen_width],
+    )
     
-    wrap = create_page_wrapper(theme_value, loc_value, auth_value)
+    wrap = create_page_wrapper(theme_value, loc_value, auth_value, screen_value)
     
     not_found_route = ft.Route(path="/404", component=wrap(four_zero_four))
 
@@ -81,7 +105,7 @@ def routingApp():
             not_found_route
         ],
         manage_views=False,
-        not_found=lambda: ft.context.page.go("/404")
+        not_found=lambda: ft.context.page.navigate("/404")
     )
     
     try:
@@ -91,7 +115,10 @@ def routingApp():
                 theme_value,
                 lambda: LocalizationContext(
                     loc_value,
-                    lambda: app_router,
+                    lambda: ScreenContext(
+                        screen_value,
+                        lambda: app_router,
+                    ),
                 ),
             ),
         )

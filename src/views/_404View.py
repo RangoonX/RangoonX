@@ -53,7 +53,7 @@ def four_zero_four():
                         value_key="nav_home",
                         variant="filled",
                         icon=ft.Icons.HOME_OUTLINED,
-                        on_click=lambda e: page.go("/"),
+                        on_click=lambda e: page.navigate("/"),
                         style=ft.ButtonStyle(
                             bgcolor=AppPalette.PRIMARY,
                             color=AppPalette.ON_PRIMARY,

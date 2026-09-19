@@ -13,6 +13,7 @@ async def main(page: ft.Page):
     page.theme = colors.get_app_theme(ft.ThemeMode.LIGHT)
     page.dark_theme = colors.get_app_theme(ft.ThemeMode.DARK)
     page.padding = 0
+    page.bgcolor = colors.AppPalette.SURFACE
     page.render(routingApp)
     
     

@@ -4,15 +4,21 @@ from components.typography import AppText, AppButton
 from components.animations import PopInContainer
 from components.footer import AppFooter
 from config.colors import AppPalette
+from core.helper import use_screen_context
 
 
 def get_company_info():
+    import os
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     candidate_paths = [
+        os.path.join(base_dir, "config", "company_info.json"),
+        os.path.join(base_dir, "assets", "config", "company_info.json"),
         "config/company_info.json",
         "assets/config/company_info.json",
-        "src/assets/config/company_info.json",
     ]
     for path in candidate_paths:
+        if not os.path.isfile(path):
+            continue
         try:
             with open(path, "r", encoding="utf-8") as f:
                 return json.load(f)
@@ -96,11 +102,11 @@ def ContactInfoRow(
 @ft.component
 def contactView():
     page = ft.context.page
-    width = page.width if page and page.width else 1200
+    screen = use_screen_context()
     company_info = get_company_info()
 
-    is_mobile = width < 768
-    is_tablet = 768 <= width < 1024
+    is_mobile = screen.is_mobile
+    is_tablet = screen.is_tablet
 
     text_align_mode = ft.TextAlign.CENTER if is_mobile else ft.TextAlign.LEFT
     cross_align_mode = ft.CrossAxisAlignment.CENTER if is_mobile else ft.CrossAxisAlignment.START
@@ -293,7 +299,9 @@ def contactView():
             max_lines=max_lines,
             border_radius=ft.BorderRadius.all(10),
             border_color=AppPalette.OUTLINE_VARIANT,
+            border_width=1,
             focused_border_color=AppPalette.PRIMARY,
+            focused_border_width=2,
             text_size=14,
             content_padding=ft.Padding.symmetric(horizontal=16, vertical=14),
         )
@@ -375,7 +383,9 @@ def contactView():
                 ],
                 border_radius=ft.BorderRadius.all(10),
                 border_color=AppPalette.OUTLINE_VARIANT,
+                border_width=1,
                 focused_border_color=AppPalette.PRIMARY,
+                focused_border_width=2,
                 text_size=14,
                 content_padding=ft.Padding.symmetric(horizontal=16, vertical=14),
             ),

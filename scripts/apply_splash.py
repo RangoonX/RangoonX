@@ -4,6 +4,7 @@ idx = pathlib.Path("build/web/index.html")
 html = idx.read_text()
 
 splash_script = (
+    '<style>html,body{background-color:#FFFFFF !important}</style>\n'
     '<script>\n'
     'function removeSplashFromWeb(){var s=document.getElementById("splash");'
     'if(s){s.style.opacity="0";setTimeout(function(){s.remove()},500)}}\n'

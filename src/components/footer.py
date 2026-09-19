@@ -1,15 +1,15 @@
 import flet as ft
 from components.typography import AppText
 from config.colors import AppPalette
+from core.helper import use_screen_context
 
 
 @ft.component
 def AppFooter():
-    page = ft.context.page
-    width = page.width if page and page.width else 1200
+    screen = use_screen_context()
 
-    is_mobile = width < 768
-    is_tablet = 768 <= width < 1024
+    is_mobile = screen.is_mobile
+    is_tablet = screen.is_tablet
 
     text_align_mode = ft.TextAlign.CENTER if is_mobile else ft.TextAlign.LEFT
     cross_align_mode = ft.CrossAxisAlignment.CENTER if is_mobile else ft.CrossAxisAlignment.START

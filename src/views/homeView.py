@@ -3,7 +3,7 @@ from components.typography import AppText, AppButton
 from components.animations import PopInContainer
 from components.footer import AppFooter
 from config.colors import AppPalette
-from models.app_route_model import LocalizationContext
+from core.helper import use_screen_context
 
 
 @ft.component
@@ -90,26 +90,25 @@ def CapabilityBlock(
 @ft.component
 def homeView():
     page = ft.context.page
-    width = page.width if page and page.width else 1200
+    screen = use_screen_context()
 
-    is_mobile = width < 768
-    is_tablet = 768 <= width < 1024
+    is_mobile = screen.is_mobile
+    is_tablet = screen.is_tablet
 
     text_align_mode = ft.TextAlign.CENTER if is_mobile else ft.TextAlign.LEFT
     cross_align_mode = ft.CrossAxisAlignment.CENTER if is_mobile else ft.CrossAxisAlignment.START
     main_align_mode = ft.MainAxisAlignment.CENTER if is_mobile else ft.MainAxisAlignment.START
 
-    hero_revealed, set_hero_revealed = ft.use_state(True)
-    capabilities_revealed, set_capabilities_revealed = ft.use_state(not is_mobile)
-    contact_revealed, set_contact_revealed = ft.use_state(not is_mobile)
+    hero_revealed, set_hero_revealed = ft.use_state(False)
+    capabilities_revealed, set_capabilities_revealed = ft.use_state(False)
+    contact_revealed, set_contact_revealed = ft.use_state(False)
 
-    def handle_scroll(e: ft.OnScrollEvent):
-        if is_mobile:
-            pos = e.extent_before
-            if pos >= 80 and not capabilities_revealed:
-                set_capabilities_revealed(True)
-            if pos >= 320 and not contact_revealed:
-                set_contact_revealed(True)
+    def trigger_auto_animations():
+        set_hero_revealed(True)
+        set_capabilities_revealed(True)
+        set_contact_revealed(True)
+
+    ft.on_updated(trigger_auto_animations, [])
 
     # ── Hero Section ──────────────────────────────────────────────────────────
     hero_text_column = ft.Column(
@@ -148,7 +147,7 @@ def homeView():
                     AppButton(
                         value_key="explore_services",
                         variant="filled",
-                        on_click=lambda e: page.go("/services"),
+                        on_click=lambda e: page.navigate("/services"),
                         style=ft.ButtonStyle(
                             bgcolor=AppPalette.PRIMARY,
                             color=AppPalette.ON_PRIMARY,
@@ -161,7 +160,7 @@ def homeView():
                     AppButton(
                         value_key="contact_sales",
                         variant="outlined",
-                        on_click=lambda e: page.go("/contact"),
+                        on_click=lambda e: page.navigate("/contact"),
                         style=ft.ButtonStyle(
                             color=AppPalette.PRIMARY,
                             padding=ft.Padding.symmetric(horizontal=28, vertical=16),
@@ -420,7 +419,7 @@ def homeView():
                         AppButton(
                             value_key="contact_sales",
                             variant="filled",
-                            on_click=lambda e: page.go("/contact"),
+                            on_click=lambda e: page.navigate("/contact"),
                             style=ft.ButtonStyle(
                                 bgcolor=AppPalette.PRIMARY,
                                 color=AppPalette.ON_PRIMARY,
@@ -442,7 +441,6 @@ def homeView():
     return ft.ListView(
         expand=True,
         spacing=0,
-        on_scroll=handle_scroll,
         controls=[
             hero_section,
             capabilities_section,
