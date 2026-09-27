@@ -1,69 +1,55 @@
-# Rangoonx app
+# RangoonX Software House
 
-## Run the app
+> **သင့်လုပ်ငန်းအတွက် နည်းပညာဝန်ဆောင်မှု**  
+> Modern, high-performance web platform built with Next.js 16, React 19, TypeScript, and Tailwind CSS.
 
-### uv
+## 🚀 Overview
 
-Run as a desktop app:
+RangoonX is a premier software engineering firm based in Yangon, Myanmar, specializing in:
+- **Specialized Customized Software** (Web & Mobile Apps)
+- **Enterprise POS & ERP Systems** (Cloud-synced POS, Multi-warehouse Inventory, Financial Accounting)
+- **Cloud Architecture & Migration** (AWS, Google Cloud, Docker, CI/CD)
+- **AI & Data Analytics** (LLM Pipelines, Business Intelligence, Automation)
+- **IoT & Electronic Solutions** (Smart Telemetry, Embedded Systems)
 
-```bash
-uv run flet run
-```
+---
 
-Run as a web app:
+## 🛠️ Tech Stack
 
-```bash
-uv run flet run --web
-```
+- **Framework:** Next.js 16 (App Router, Static HTML Export)
+- **Core:** React 19, TypeScript
+- **Styling:** Tailwind CSS v4
+- **Icons:** Lucide React
+- **Deployment:** GitHub Pages (Automated via GitHub Actions)
+- **Internationalization:** Bilingual (Myanmar `mm` & English `en`)
 
-For more details on running the app, refer to the [Getting Started Guide](https://flet.dev/docs/).
+---
 
-## Build the app
+## 💻 Local Development
 
-### Android
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-```bash
-flet build apk -v
-```
+2. **Start development server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-For more details on building and signing `.apk` or `.aab`, refer to the [Android Packaging Guide](https://flet.dev/docs/publish/android/).
+3. **Production Build & Static Export:**
+   ```bash
+   npm run build
+   ```
 
-### iOS
+---
 
-```bash
-flet build ipa -v
-```
+## 🌐 Deployment to GitHub Pages
 
-For more details on building and signing `.ipa`, refer to the [iOS Packaging Guide](https://flet.dev/docs/publish/ios/).
+Deployment is automated via GitHub Actions on every push to the `main` branch:
+Workflow: [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
 
-### macOS
+---
 
-```bash
-flet build macos -v
-```
-
-For more details on building macOS package, refer to the [macOS Packaging Guide](https://flet.dev/docs/publish/macos/).
-
-### Linux
-
-```bash
-flet build linux -v
-```
-
-For more details on building Linux package, refer to the [Linux Packaging Guide](https://flet.dev/docs/publish/linux/).
-
-### Windows
-
-```bash
-flet build windows -v
-```
-
-For more details on building Windows package, refer to the [Windows Packaging Guide](https://flet.dev/docs/publish/windows/).
-
-### Web
-
-```bash
-flet build web -v
-```
-
-For more details on building Web app, refer to the [Web Packaging Guide](https://flet.dev/docs/publish/web/).
+© 2026 RangoonX Software House. All rights reserved.

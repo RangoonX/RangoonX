@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --border: #cbd5e1;
+    --primary: #0284c7;
+    --accent: #00d1ff;
+  }
+
+  .dark {
+    --background: #070b12;
+    --foreground: #f8fafc;
+    --card: #0f172a;
+    --card-foreground: #f8fafc;
+    --border: #334155;
+    --primary: #38bdf8;
+    --accent: #00d1ff;
+  }
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.font-myanmar {
+  font-family: var(--font-padauk), "Pyidaungsu", "Noto Sans Myanmar", sans-serif;
+  line-height: 1.85;
+}
+
+/* Background blueprint grid */
+.bg-grid-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(100, 116, 139, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(100, 116, 139, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.dark .bg-grid-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Radial Glow */
+.radial-glow {
+  background: radial-gradient(circle 800px at 50% -120px, rgba(2, 132, 199, 0.12), transparent 70%);
+}
+
+.dark .radial-glow {
+  background: radial-gradient(circle 800px at 50% -120px, rgba(2, 132, 199, 0.25), transparent 70%);
+}
+
+/* High-Contrast Glass & Surface Panels */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+.dark .glass-panel {
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+}
+
+/* Custom minimal scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.35);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.6);
+}
