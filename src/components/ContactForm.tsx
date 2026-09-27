@@ -21,6 +21,7 @@ export default function ContactForm() {
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
     interest: "form_interest_opt1",
     message: "",
   });
@@ -30,7 +31,7 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.firstName.trim() || !formData.email.trim() || !formData.message.trim()) {
+    if (!formData.firstName.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.message.trim()) {
       setErrorMessage(t("form_required_error", "Please fill in all required fields."));
       return;
     }
@@ -65,6 +66,7 @@ export default function ContactForm() {
             subject: `RangoonX New Inquiry: ${fullName} (${serviceName})`,
             name: fullName,
             email: formData.email,
+            phone: formData.phone,
             service: serviceName,
             message: formData.message,
             from_name: "RangoonX Website",
@@ -84,6 +86,7 @@ export default function ContactForm() {
             _replyto: formData.email,
             "Full Name": fullName,
             "Client Email": formData.email,
+            "Phone Number": formData.phone,
             "Interested Service": serviceName,
             "Project Details": formData.message,
             "Submitted At": new Date().toLocaleString(),
@@ -231,6 +234,7 @@ export default function ContactForm() {
                       firstName: "",
                       lastName: "",
                       email: "",
+                      phone: "",
                       interest: "form_interest_opt1",
                       message: "",
                     });
@@ -274,19 +278,37 @@ export default function ContactForm() {
                 </div>
               </div>
 
-              {/* Work Email */}
-              <div className="space-y-2">
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
-                  {t("form_email", "Work Email")} <span className="text-rose-600 dark:text-rose-400">*</span>
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-950 dark:text-white placeholder-slate-400 focus:outline-none focus:border-sky-500 text-sm transition-all font-medium"
-                  placeholder="name@company.com"
-                />
+              {/* Work Email & Phone Number */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Work Email */}
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
+                    {t("form_email", "Work Email")} <span className="text-rose-600 dark:text-rose-400">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-4 py-3 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-950 dark:text-white placeholder-slate-400 focus:outline-none focus:border-sky-500 text-sm transition-all font-medium"
+                    placeholder="name@company.com"
+                  />
+                </div>
+
+                {/* Phone Number */}
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-100">
+                    {t("form_phone", "သင့်လုပ်ငန်း ဖုန်းနံပါတ်")} <span className="text-rose-600 dark:text-rose-400">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="w-full px-4 py-3 rounded-lg border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-950 dark:text-white placeholder-slate-400 focus:outline-none focus:border-sky-500 text-sm transition-all font-medium"
+                    placeholder={t("form_phone_placeholder", "+959 123 456 789")}
+                  />
+                </div>
               </div>
 
               {/* Area of Interest */}

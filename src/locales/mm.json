@@ -56,6 +56,8 @@
     "form_first_name": "အမည် (ပထမ)",
     "form_last_name": "အမည် (ဒုတိယ)",
     "form_email": "လုပ်ငန်း အီးမေးလ်",
+    "form_phone": "သင့်လုပ်ငန်း ဖုန်းနံပါတ်",
+    "form_phone_placeholder": "၀၉... / +959...",
     "form_interest": "စိတ်ပါဝင်စားသည့် ဝန်ဆောင်မှု",
     "form_interest_placeholder": "ဝန်ဆောင်မှု အမျိုးအစား ရွေးချယ်ပါ",
     "form_interest_opt1": "စိတ်ကြိုက် Software ရေးဆွဲခြင်း",

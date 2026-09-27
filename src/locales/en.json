@@ -56,6 +56,8 @@
     "form_first_name": "First Name",
     "form_last_name": "Last Name",
     "form_email": "Work Email",
+    "form_phone": "Business Phone Number",
+    "form_phone_placeholder": "+959 123 456 789",
     "form_interest": "Area of Interest",
     "form_interest_placeholder": "Select a service area",
     "form_interest_opt1": "Custom Software Development",
