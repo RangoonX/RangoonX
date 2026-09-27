@@ -12,6 +12,7 @@ import {
   ArrowUpRight, 
   MessageSquare
 } from "lucide-react";
+import { getAssetPath } from "@/utils/paths";
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -24,7 +25,7 @@ export default function Footer() {
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="inline-flex items-center gap-3">
               <Image
-                src="/icons/Icon-512.png"
+                src={getAssetPath("/icons/Icon-512.png")}
                 alt="RangoonX"
                 width={32}
                 height={32}

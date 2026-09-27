@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { ArrowRight, ShieldCheck, Sparkles, Terminal } from "lucide-react";
+import { getAssetPath } from "@/utils/paths";
 
 export default function Hero() {
   const { t } = useLanguage();
@@ -52,7 +53,7 @@ export default function Hero() {
             <div className="relative rounded-2xl overflow-hidden border-2 border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl">
               <div className="relative aspect-[4/3] w-full">
                 <Image
-                  src="/images/banner.png"
+                  src={getAssetPath("/images/banner.png")}
                   alt="RangoonX Engineering Workspace"
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"

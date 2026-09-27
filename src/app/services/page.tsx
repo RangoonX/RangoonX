@@ -14,6 +14,7 @@ import {
   CheckCircle2
 } from "lucide-react";
 import CtaBanner from "@/components/CtaBanner";
+import { getAssetPath } from "@/utils/paths";
 
 export default function ServicesPage() {
   const { t } = useLanguage();
@@ -175,7 +176,7 @@ export default function ServicesPage() {
         <div className="relative rounded-3xl overflow-hidden border-2 border-slate-300 dark:border-slate-700 shadow-2xl">
           <div className="relative aspect-[21/9] min-h-[300px] w-full">
             <Image
-              src="/images/service_banner.png"
+              src={getAssetPath("/images/service_banner.png")}
               alt="RangoonX Services Overview"
               fill
               sizes="(max-width: 1280px) 100vw, 1280px"

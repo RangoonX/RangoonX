@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const siteUrl = "https://rangoonx.com";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export const viewport: Viewport = {
   themeColor: [
@@ -99,11 +100,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.png", sizes: "32x32", type: "image/png" },
-      { url: "/icons/Icon-512.png", sizes: "512x512", type: "image/png" },
+      { url: `${basePath}/favicon.png`, sizes: "32x32", type: "image/png" },
+      { url: `${basePath}/icons/Icon-512.png`, sizes: "512x512", type: "image/png" },
     ],
     apple: [
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      { url: `${basePath}/apple-touch-icon.png`, sizes: "180x180", type: "image/png" },
     ],
   },
 };

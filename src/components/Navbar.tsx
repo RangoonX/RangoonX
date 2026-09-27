@@ -15,6 +15,8 @@ import {
   ArrowRight
 } from "lucide-react";
 
+import { getAssetPath } from "@/utils/paths";
+
 export default function Navbar() {
   const { language, toggleLanguage, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
@@ -52,7 +54,7 @@ export default function Navbar() {
             className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 rounded-lg"
           >
             <Image
-              src="/icons/Icon-512.png"
+              src={getAssetPath("/icons/Icon-512.png")}
               alt="RangoonX"
               width={40}
               height={40}
