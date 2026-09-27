@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/"],
     },
-    sitemap: "https://rangoonx.com/sitemap.xml",
+    sitemap: "https://rangoonx.github.io/RangoonX/sitemap.xml",
   };
 }

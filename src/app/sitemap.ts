@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://rangoonx.com";
+  const baseUrl = "https://rangoonx.github.io/RangoonX";
   const now = new Date();
 
   return [

@@ -6,7 +6,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-const siteUrl = "https://rangoonx.com";
+const siteUrl = "https://rangoonx.github.io/RangoonX";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export const viewport: Viewport = {
@@ -55,26 +55,28 @@ export const metadata: Metadata = {
   creator: "RangoonX Software House",
   publisher: "RangoonX Software House",
   alternates: {
-    canonical: "/",
+    canonical: "https://rangoonx.github.io/RangoonX/",
     languages: {
-      "my-MM": "/",
-      "en-US": "/",
+      "my-MM": "https://rangoonx.github.io/RangoonX/",
+      "en-US": "https://rangoonx.github.io/RangoonX/",
     },
   },
   openGraph: {
     type: "website",
     locale: "my_MM",
     alternateLocale: ["en_US"],
-    url: siteUrl,
+    url: "https://rangoonx.github.io/RangoonX/",
     siteName: "RangoonX Software House",
     title: "RangoonX | သင့်လုပ်ငန်းအတွက် နည်းပညာဝန်ဆောင်မှု",
     description:
       "Specialized Customized Software၊ Cloud နည်းပညာဝန်ဆောင်မှု၊ AI and Data Analytics၊ IoT and Electronic နှင့် Enterprise POS/ERP စနစ်များ တည်ဆောက်ပေးသော Software House။",
     images: [
       {
-        url: "/images/banner.png",
+        url: "https://rangoonx.github.io/RangoonX/images/og-preview.png",
+        secureUrl: "https://rangoonx.github.io/RangoonX/images/og-preview.png",
         width: 1200,
         height: 630,
+        type: "image/png",
         alt: "RangoonX Software House - သင့်လုပ်ငန်းအတွက် နည်းပညာဝန်ဆောင်မှု",
       },
     ],
@@ -84,7 +86,7 @@ export const metadata: Metadata = {
     title: "RangoonX | Software House Myanmar",
     description:
       "သင့်လုပ်ငန်းအတွက် နည်းပညာဝန်ဆောင်မှု - Specialized Customized Software, Cloud, AI & Data Analytics, IoT.",
-    images: ["/images/banner.png"],
+    images: ["https://rangoonx.github.io/RangoonX/images/og-preview.png"],
     creator: "@rangoonx_official",
   },
   robots: {
@@ -116,7 +118,7 @@ const jsonLd = {
   alternateName: "RangoonX",
   url: siteUrl,
   logo: `${siteUrl}/icons/Icon-512.png`,
-  image: `${siteUrl}/images/banner.png`,
+  image: `${siteUrl}/images/og-preview.png`,
   description:
     "သင့်လုပ်ငန်းအတွက် နည်းပညာဝန်ဆောင်မှု - Specialized Customized Software, Cloud Architecture, AI and Data Analytics, IoT and Electronic, Enterprise POS & ERP Systems.",
   telephone: "+959785955940",
