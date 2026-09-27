@@ -36,7 +36,7 @@ export default function WhyUs() {
             {t("why_us_title", "Why RangoonX?")}
           </h2>
           <p className="text-base sm:text-lg text-slate-800 dark:text-slate-200 leading-relaxed font-normal">
-            {t("why_us_subtitle", "We approach every project with engineering discipline, architectural foresight, and craftsmanship.")}
+            {t("why_us_subtitle", "We bring every project to life with great design, scalable systems, and affordable pricing.")}
           </p>
         </div>
 
