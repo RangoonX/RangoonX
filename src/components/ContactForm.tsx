@@ -28,20 +28,88 @@ export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.firstName || !formData.email || !formData.message) {
-      setErrorMessage("Please fill in all required fields.");
+    if (!formData.firstName.trim() || !formData.email.trim() || !formData.message.trim()) {
+      setErrorMessage(t("form_required_error", "Please fill in all required fields."));
       return;
     }
 
     setErrorMessage("");
     setStatus("submitting");
 
-    // Simulate enterprise inquiry submission
-    setTimeout(() => {
-      setStatus("success");
-    }, 800);
+    const interestLabels: Record<string, string> = {
+      form_interest_opt1: "Custom Software Development (စိတ်ကြိုက် Software ရေးဆွဲခြင်း)",
+      form_interest_opt2: "Cloud Infrastructure & Migration (Cloud စနစ် တည်ဆောက်ခြင်း)",
+      form_interest_opt3: "AI & Machine Learning Integration (AI ပေါင်းစပ်ခြင်း)",
+      form_interest_opt4: "Enterprise POS / ERP Solution (လုပ်ငန်းသုံး POS / ERP စနစ်)",
+      form_interest_opt5: "Other Inquiry (အခြား မေးမြန်းချက်များ)",
+    };
+
+    const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+    const serviceName = interestLabels[formData.interest] || formData.interest;
+
+    try {
+      const web3FormsKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+      let response: Response;
+
+      if (web3FormsKey) {
+        response = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            access_key: web3FormsKey,
+            subject: `RangoonX New Inquiry: ${fullName} (${serviceName})`,
+            name: fullName,
+            email: formData.email,
+            service: serviceName,
+            message: formData.message,
+            from_name: "RangoonX Website",
+          }),
+        });
+      } else {
+        response = await fetch(`https://formsubmit.co/ajax/${companyInfo.email}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({
+            _subject: `RangoonX New Inquiry: ${fullName} (${serviceName})`,
+            _template: "table",
+            _captcha: "false",
+            _replyto: formData.email,
+            "Full Name": fullName,
+            "Client Email": formData.email,
+            "Interested Service": serviceName,
+            "Project Details": formData.message,
+            "Submitted At": new Date().toLocaleString(),
+          }),
+        });
+      }
+
+      const result = await response.json();
+
+      if (response.ok && (result.success === "true" || result.success === true || result.success === undefined)) {
+        setStatus("success");
+      } else if (result.message && result.message.includes("Activation")) {
+        setStatus("success");
+      } else {
+        throw new Error(result.message || "Failed to submit inquiry");
+      }
+    } catch (err) {
+      console.error("Inquiry submission error:", err);
+      setErrorMessage(
+        t(
+          "form_error",
+          "မေးမြန်းချက် ပေးပို့ရာတွင် အဆင်မပြေမှု ဖြစ်ပေါ်နေပါသည်။ အောက်ပါ အီးမေးလ် သို့မဟုတ် ဖုန်းနံပါတ်သို့ တိုက်ရိုက် ဆက်သွယ်ပေးပို့နိုင်ပါသည်။"
+        )
+      );
+      setStatus("error");
+    }
   };
 
   return (
@@ -150,7 +218,7 @@ export default function ContactForm() {
                 <CheckCircle2 className="w-8 h-8" />
               </div>
               <h3 className="text-2xl font-black text-slate-950 dark:text-white">
-                Inquiry Received
+                {t("form_inquiry_received", "Inquiry Received")}
               </h3>
               <p className="text-slate-800 dark:text-slate-200 max-w-md mx-auto text-sm sm:text-base leading-relaxed font-normal">
                 {t("form_success", "Thank you for reaching out! Our engineering team will review your inquiry and get back to you within 24 hours.")}
@@ -169,7 +237,7 @@ export default function ContactForm() {
                   }}
                   className="px-6 py-2.5 rounded-lg text-sm font-bold bg-sky-600 text-white hover:bg-sky-500 transition-colors shadow-md cursor-pointer"
                 >
-                  Send Another Inquiry
+                  {t("form_send_another", "Send Another Inquiry")}
                 </button>
               </div>
             </div>
@@ -255,7 +323,28 @@ export default function ContactForm() {
               </div>
 
               {errorMessage && (
-                <p className="text-rose-600 dark:text-rose-400 text-xs font-bold">{errorMessage}</p>
+                <div className="p-4 rounded-xl bg-rose-50 dark:bg-rose-950/40 border-2 border-rose-300 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs sm:text-sm space-y-2">
+                  <p className="font-semibold">{errorMessage}</p>
+                  <div className="flex flex-wrap items-center gap-3 pt-1 text-xs">
+                    <a
+                      href={`mailto:${companyInfo.email}?subject=Inquiry from ${encodeURIComponent(formData.firstName)}&body=${encodeURIComponent(formData.message)}`}
+                      className="inline-flex items-center gap-1 font-bold text-sky-700 dark:text-sky-400 hover:underline"
+                    >
+                      <Mail className="w-3.5 h-3.5" />
+                      Email ဖြင့် တိုက်ရိုက်ပို့ရန်
+                    </a>
+                    <span className="text-slate-400">•</span>
+                    <a
+                      href={companyInfo.viber_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 font-bold text-purple-700 dark:text-purple-400 hover:underline"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      Viber ဖြင့် ဆက်သွယ်ရန်
+                    </a>
+                  </div>
+                </div>
               )}
 
               {/* Submit Button */}
